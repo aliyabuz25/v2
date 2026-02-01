@@ -206,6 +206,36 @@ function initPage() {
     techProgramsGrid.insertBefore(fragment, techProgramsGrid.firstChild);
   }
 
+  const originalTexts = {};
+
+  const saveOriginalTexts = () => {
+    getI18nNodes().forEach((element) => {
+      const key = element.dataset.i18nKey;
+      if (!originalTexts[key]) {
+        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+          originalTexts[key] = element.placeholder;
+        } else {
+          originalTexts[key] = element.textContent;
+        }
+      }
+    });
+  };
+
+  const restoreOriginalTexts = () => {
+    getI18nNodes().forEach((element) => {
+      const key = element.dataset.i18nKey;
+      const originalText = originalTexts[key];
+      if (originalText) {
+        if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+          element.placeholder = originalText;
+        } else {
+          element.textContent = originalText;
+        }
+      }
+    });
+    formatStudyDescriptions();
+  };
+
   const applyTranslations = (dictionary) => {
     getI18nNodes().forEach((element) => {
       const key = element.dataset.i18nKey;
@@ -240,9 +270,13 @@ function initPage() {
   };
 
   const setLanguage = (code) => {
-    loadTranslationFile(code).then((dictionary) => {
-      applyTranslations(dictionary);
-    });
+    if (code === "az") {
+      restoreOriginalTexts();
+    } else {
+      loadTranslationFile(code).then((dictionary) => {
+        applyTranslations(dictionary);
+      });
+    }
   };
 
   const updateLanguageByAttr = (langAttr) => {
@@ -567,6 +601,8 @@ function initPage() {
   };
 
 
+  saveOriginalTexts();
+
   languageButtons.forEach((btn) => {
     const flagImg = btn.querySelector(".dropdown-flag-icon");
     const baseFlag = btn.dataset.flag;
@@ -578,8 +614,6 @@ function initPage() {
     }
     btn.addEventListener("click", () => handleSelection(btn));
   });
-
-  updateLanguageByAttr(DEFAULT_LANGUAGE);
   alignEllipses();
   window.addEventListener("resize", alignEllipses);
   enableHeroElementSwap();
