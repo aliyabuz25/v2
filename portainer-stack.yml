@@ -5,7 +5,7 @@ services:
     container_name: onfuture-web
     restart: unless-stopped
     build:
-      context: https://github.com/aliyabuz25/v2.git
+      context: https://github.com/aliyabuz25/onfuture-web-2.git
       dockerfile: Dockerfile
     ports:
       - "6985:6985"
