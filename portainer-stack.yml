@@ -17,7 +17,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.docker.network=edge'
-      - 'traefik.http.routers.onfuture.rule=Host(`onfuture.com`) || Host(`www.onfuture.com`)'
+      - 'traefik.http.routers.onfuture.rule=Host(`onfuture.az`) || Host(`www.onfuture.az`)'
       - 'traefik.http.routers.onfuture.entrypoints=web'
       - 'traefik.http.services.onfuture.loadbalancer.server.port=6985'
       - 'com.centurylinklabs.watchtower.enable=true'
