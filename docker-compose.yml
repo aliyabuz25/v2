@@ -1,21 +1,17 @@
+version: '3.8'
+
 services:
-  onfuture-app:
-    image: onfuture-web:latest
+  onfuture:
+    build: .
+    container_name: onfuture-web
     restart: unless-stopped
+    ports:
+      - "6985:6985"
     environment:
-      PORT: "6985"
-      HOST: "0.0.0.0"
-    volumes:
-      - /datastore/onfuture-web/logs.json:/app/logs.json
+      - NODE_ENV=production
     networks:
-      - edge
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.docker.network=edge'
-      - 'traefik.http.routers.onfuture-app.rule=(Host(`onfuture.az`) || Host(`www.onfuture.az`))'
-      - 'traefik.http.routers.onfuture-app.entrypoints=web'
-      - 'traefik.http.services.onfuture-app.loadbalancer.server.port=6985'
+      - onfuture-network
 
 networks:
-  edge:
-    external: true
+  onfuture-network:
+    driver: bridge

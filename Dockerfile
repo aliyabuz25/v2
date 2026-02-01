@@ -1,7 +1,13 @@
-FROM node:20-alpine
+FROM node:18-alpine
+
 WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --production
+
 COPY . .
+
 EXPOSE 6985
-ENV HOST=0.0.0.0
-ENV PORT=6985
+
 CMD ["node", "server.js"]
